@@ -4,47 +4,51 @@ using _Source.Contracts.CardHandler;
 using _Source.Contracts.DTO.Card;
 using _Source.Contracts.DTO.Player;
 using _Source.Contracts.DTO.Web;
-using _Source.Contracts.GameLobby;
 using _Source.Contracts.Player;
 using _Source.Domain.Card;
-using _Source.Domain.GameLobby;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
-using Zenject;
 
 namespace _Source.Domain.Player
 {
-    public class PlayerModel : IMessageHandler<AddCardDTO>, IMessageHandler<SelectCardDTO>, IMessageHandler<DeselectCardDTO>, IDisposable, IPlayerModel
+    public class PlayerModel : IDisposable, IPlayerModel
     {
         private PlayerData _playerData;
 
         private ICardHandlerModel _cardHandlerModel;
-        private ICardHandlerModel _selectedCardHandlerModel;
+        private ICardGridModel _cardGridModel;
+        
+        private IPublisher<CardMoveDTO> _cardModePublisher;
         
         private readonly IPublisher<CurrentPlayerAddedDTO> _playerAddedPublisher;
+        private readonly IPublisher<SelectViewCardDTO> _selectViewCardPublisher;
 
         private readonly ISubscriber<AddCardDTO> _addCardPublisher;
         private readonly ISubscriber<SelectCardDTO> _selectCardPublisher;
-        private readonly ISubscriber<DeselectCardDTO> _deselectCardPublisher;
 
         private DisposableBagBuilder _disposable;
 
         public PlayerData PlayerData => _playerData;
 
-        public PlayerModel(PlayerData playerData, IPublisher<CurrentPlayerAddedDTO> player, ISubscriber<AddCardDTO> add, ISubscriber<SelectCardDTO> select, ISubscriber<DeselectCardDTO> deselect)
+        public PlayerModel(PlayerData playerData, PlayerMessageData playerMessageData, ICardGridModel gridModel)
         {
+            _cardGridModel = gridModel;
+            
             SetupPlayer(playerData);
+
+            _cardModePublisher = playerMessageData.CardModePublisher;
             
             _disposable = DisposableBag.CreateBuilder();
 
-            _playerAddedPublisher = player;
-            _addCardPublisher = add;
-            _selectCardPublisher = select;
-            _deselectCardPublisher = deselect;
+            _playerAddedPublisher = playerMessageData.Player;
+            _selectViewCardPublisher = playerMessageData.SelectView;
             
-            _addCardPublisher.Subscribe(this).AddTo(_disposable);
-            _selectCardPublisher.Subscribe(this).AddTo(_disposable);
-            _deselectCardPublisher.Subscribe(this).AddTo(_disposable);
+            _addCardPublisher = playerMessageData.Add;
+            _selectCardPublisher = playerMessageData.Select;
+            
+            _addCardPublisher.Subscribe((message) => CreateCard(message.CardData).Forget()).AddTo(_disposable);
+            _selectCardPublisher.Subscribe((message) => SelectCard(message)).AddTo(_disposable);
             
             _playerAddedPublisher.Publish(new CurrentPlayerAddedDTO(_playerData.Name, _playerData.UserId));
         }
@@ -55,32 +59,27 @@ namespace _Source.Domain.Player
 
             _cardHandlerModel = new CardHandlerModel();
             
+            _cardHandlerModel.InitCardGrid(_cardGridModel);
+            
             _playerData.GameLobby.AddPlayer(this);
         }
-
-        public void Handle(AddCardDTO message)
-        {
-            var card = new CardModel(message.CardData);
-            
-            _cardHandlerModel.AddCard(card);
-        }
-
-
-        public void Handle(SelectCardDTO message)
-        {
-            ICardModel card = _cardHandlerModel.GetCard(message.CardData);
-            
-            _cardHandlerModel.RemoveCard(card.CardData);
-            
-            _selectedCardHandlerModel.AddCard(card);
-        }
         
-
-        public void Handle(DeselectCardDTO message)
+        private async UniTask CreateCard(CardData[] cardsData)
         {
-            ICardModel card = _selectedCardHandlerModel.GetCard(message.CardData);
-            _selectedCardHandlerModel.RemoveCard(card.CardData);
-            _cardHandlerModel.AddCard(card);
+            for (int i = 0; i < cardsData.Length; i++)
+            {
+                var card = new CardModel(cardsData[i], _cardModePublisher);
+
+                _cardHandlerModel.AddCard(card);
+                await UniTask.Delay(250);
+            }
+        }
+
+        public void SelectCard(SelectCardDTO message)
+        {
+            _cardHandlerModel.SelectCard(message.CardData, message.Select);
+            
+            _selectViewCardPublisher.Publish(new SelectViewCardDTO(message.CardData, message.Select));
         }
 
         public void Dispose()

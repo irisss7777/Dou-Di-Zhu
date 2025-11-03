@@ -12,6 +12,7 @@ namespace _Source.Domain.GameLobby
     public class GameLobbyModel : IGameLobbyModel
     {
         [Inject] private readonly IPublisher<GameActiveStateDTO> _gameActiveStatePublisher;
+        [Inject] private readonly IPublisher<LobbyInfoStateDTO> _lobbyInfoStatePublisher;
         [Inject] private readonly IPublisher<AddPlayerToLobbyDTO> _addPlayerToLobbyPublisher;
         private List<IPlayerModel> _players = new();
 
@@ -52,6 +53,9 @@ namespace _Source.Domain.GameLobby
             
             _addPlayerToLobbyPublisher.Publish(new AddPlayerToLobbyDTO(playerNames.ToArray(), _players.Count, _maxPlayerCount));
             _gameActiveStatePublisher.Publish(new GameActiveStateDTO(true));
+            
+            if(_players.Count >= _maxPlayerCount)
+                _lobbyInfoStatePublisher.Publish(new LobbyInfoStateDTO((true)));
         }
     }
 }

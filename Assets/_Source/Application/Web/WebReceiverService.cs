@@ -16,11 +16,12 @@ namespace _Source.Application.Web
         private Dictionary<string, Action<RawMessageReceiveDTO>> _eventHandlers;
         
         [Inject] private readonly ISubscriber<RawMessageReceiveDTO> _inputConnectionDTO;
-
+        
         [Inject] private readonly IPublisher<PlayerConnectedDTO> _connectedPlayerPublisher;
         [Inject] private readonly IPublisher<SidePlayerConnectedDTO> _newPlayerConnectedPublisher;
         [Inject] private readonly IPublisher<PlayerLeaveDTO> _playerLeavePublisher;
         [Inject] private readonly IPublisher<AllPlayerInfoDTO> _allPlayerInfoPublisher;
+        [Inject] private readonly IPublisher<AddCardDTO> _addCardPublisher;
 
         private DisposableBagBuilder _disposable;
         
@@ -36,7 +37,8 @@ namespace _Source.Application.Web
                 { WebSocketMessageType.USER_JOIN.ToString(), CreateHandler(_connectedPlayerPublisher) },
                 { WebSocketMessageType.NEW_USER_JOIN.ToString(), CreateHandler(_newPlayerConnectedPublisher) },
                 { WebSocketMessageType.USER_LEAVE.ToString(), CreateHandler(_playerLeavePublisher) },
-                { WebSocketMessageType.ALL_USER_INFO.ToString(), CreateHandler(_allPlayerInfoPublisher) }
+                { WebSocketMessageType.ALL_USER_INFO.ToString(), CreateHandler(_allPlayerInfoPublisher) },
+                { WebSocketMessageType.ADD_CARD.ToString(), CreateHandler(_addCardPublisher) },
             };
             
             _disposable = DisposableBag.CreateBuilder();

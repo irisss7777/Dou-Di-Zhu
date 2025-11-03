@@ -9,42 +9,31 @@ namespace _Source.Domain.Card
 {
     public class CardModel : ICardModel
     {
+	    private IPublisher<CardMoveDTO> _cardModePublisher;
 	    private CardData _cardData;
 
-	    private IPublisher<CardMoveDTO> _cardMovePublisher;
-	    private IPublisher<CardSetBombDTO> _cardSetBombPublisher;
-	    private IPublisher<CardDestroyViewDTO> _cardDestroyPublisher;
-
 	    public CardData CardData => _cardData;
-
-	    [Inject]
-	    private void Construct(IPublisher<CardMoveDTO> cardMovePublisher, IPublisher<CardSetBombDTO> cardSetBombPublisher)
-	    {
-		    _cardMovePublisher = cardMovePublisher;
-		    _cardSetBombPublisher = cardSetBombPublisher;
-	    }
 	    
-		public CardModel(CardData cardData)
+		public CardModel(CardData cardData, IPublisher<CardMoveDTO> cardModePublisher)
 		{
+			_cardModePublisher = cardModePublisher;
 			_cardData = cardData;
 		}
 
 		public void MoveCard(Vector3 direction, float duration)
 		{
 			var dto = new CardMoveDTO(_cardData, direction, duration);
-			_cardMovePublisher.Publish(dto);
+			_cardModePublisher.Publish(dto);
 		}
 
 		public void SetBomb(bool active)
 		{
 			var dto = new CardSetBombDTO(_cardData, active);
-			_cardSetBombPublisher.Publish(dto);
 		}
 
 		public void Dispose()
 		{
 			var dto = new CardDestroyViewDTO(_cardData);
-			_cardDestroyPublisher.Publish(dto);
 		}
     }
 }

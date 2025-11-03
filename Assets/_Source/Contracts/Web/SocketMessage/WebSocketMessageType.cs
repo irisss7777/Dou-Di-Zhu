@@ -12,6 +12,7 @@ namespace _Source.Contracts.Web.SocketMessage
         GAME_STATE,
         GAME_MOVE,
         GAME_START,
-        ERROR
+        ERROR,
+        ADD_CARD,
     }
 }

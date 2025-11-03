@@ -20,15 +20,18 @@ namespace _Source.Infrastructure.Installers
             InputDTO(options);
             GameStateDTO(options);
             DomainDTO(options);
+            ViewDTO(options);
         }
 
         private void GameStateDTO(MessagePipeOptions options)
         {
+            Container.BindMessageBroker<LobbyInfoStateDTO>(options);
             Container.BindMessageBroker<GameActiveStateDTO>(options);
         }
 
         private void InputDTO(MessagePipeOptions options)
         {
+            Container.BindMessageBroker<SelectInputCardDTO>(options);
             Container.BindMessageBroker<InputConnectionDTO>(options);
         }
 
@@ -48,15 +51,21 @@ namespace _Source.Infrastructure.Installers
             Container.BindMessageBroker<SidePlayerConnectedDTO>(options);
             Container.BindMessageBroker<PlayerLeaveDTO>(options);
             Container.BindMessageBroker<AllPlayerInfoDTO>(options);
+            Container.BindMessageBroker<AddCardDTO>(options);
         }
 
         private void DomainDTO(MessagePipeOptions options)
         {
             Container.BindMessageBroker<AddPlayerToLobbyDTO>(options);
             Container.BindMessageBroker<CurrentPlayerAddedDTO>(options);
-            Container.BindMessageBroker<AddCardDTO>(options);
             Container.BindMessageBroker<SelectCardDTO>(options);
             Container.BindMessageBroker<DeselectCardDTO>(options);
+            Container.BindMessageBroker<CardMoveDTO>(options);
+        }
+
+        private void ViewDTO(MessagePipeOptions options)
+        {
+            Container.BindMessageBroker<SelectViewCardDTO>(options);
         }
     }
 }

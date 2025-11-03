@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd7f675342de47369f414bde9b82ac1c, type: 3}
+  m_Name: CardDatabase
+  m_EditorClassIdentifier: 
+  _slotsCount: 10
+  _distanceBetweenCards: 0.7
+  _selectDeltaPosition: {x: 0, y: 0.7}
+  _defaultCardPositionInSlot: {x: 0, y: -3.4}
+  _moveDuration: 1
+  _cardViewPrefab: {fileID: 2337709620868366242, guid: e0f46d6d8204c8b49a960bd4a3101552, type: 3}

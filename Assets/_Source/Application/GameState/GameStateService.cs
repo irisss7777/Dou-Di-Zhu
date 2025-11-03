@@ -12,6 +12,7 @@ namespace _Source.Application.GameState
     public class GameStateService : IDisposable, IInitializable
     {
         [Inject] private readonly ISubscriber<GameActiveStateDTO> _gameActiveStateSubscriber;
+        [Inject] private readonly ISubscriber<LobbyInfoStateDTO> _lobbyInfoStateSubscriber;
         [Inject] private readonly ISubscriber<ErrorDTO> _errorConnectionSubscriber;
         [Inject] private readonly ISubscriber<ConnectionDTO> _connectionSubscriber;
 
@@ -32,6 +33,7 @@ namespace _Source.Application.GameState
             _gameActiveStateSubscriber.Subscribe((message) => SetGameActive(message.GameActive)).AddTo(_disposable);
             _errorConnectionSubscriber.Subscribe((message) => SetConnectionErrorActive(message.ErrorMessage, true)).AddTo(_disposable);
             _connectionSubscriber.Subscribe((message) => SetConnectionErrorActive("Connection error", !message.Connection)).AddTo(_disposable);
+            _lobbyInfoStateSubscriber.Subscribe((message) => SetLobbyInfoActive(message.LobbyActive)).AddTo(_disposable);
         }
 
         private void SetConnectionErrorActive(string errorMessage, bool active)
@@ -58,6 +60,13 @@ namespace _Source.Application.GameState
             var targetAlpha = active ? 0f : 1f;
             _gameStateView.StartGameGroup.DOFade(targetAlpha, 1f).OnComplete(() =>
                 _gameStateView.StartGameGroup.gameObject.SetActive(false));
+        }
+        
+        private void SetLobbyInfoActive(bool active)
+        {
+            var targetAlpha = active ? 0f : 1f;
+            _gameStateView.WaitLobbyGroup.DOFade(targetAlpha, 1f).OnComplete(() =>
+                _gameStateView.WaitLobbyGroup.gameObject.SetActive(false));
         }
 
         public void Dispose()
