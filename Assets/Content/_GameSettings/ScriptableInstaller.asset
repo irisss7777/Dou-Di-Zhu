@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _webConfig: {fileID: 11400000, guid: e161294a0dee39f44aa91bf9a3109ddd, type: 2}
   _cardDatabase: {fileID: 11400000, guid: b814daf6caaaee446a3c26123df3c899, type: 2}
+  _playerDataBase: {fileID: 11400000, guid: d034e865b09931c47bfbc916a4553f5b, type: 2}

@@ -33,6 +33,7 @@ namespace _Source.Infrastructure.Installers
         {
             Container.BindMessageBroker<SelectInputCardDTO>(options);
             Container.BindMessageBroker<InputConnectionDTO>(options);
+            Container.BindMessageBroker<UseCardInputDTO>(options);
         }
 
         private void WebServiceDTO(MessagePipeOptions options)
@@ -43,29 +44,42 @@ namespace _Source.Infrastructure.Installers
             Container.BindMessageBroker<ConnectionDTO>(options);
             Container.BindMessageBroker<ErrorDTO>(options);
             
-            //Send
+            //Send 
             Container.BindMessageBroker<PlayerConnectSendDTO>(options);
+            Container.BindMessageBroker<PlayerPassDTO>(options);
+            Container.BindMessageBroker<CanUseCardDTO>(options);
+            Container.BindMessageBroker<UseCardDTO>(options);
             
-            //Receive
+            //Receive 
             Container.BindMessageBroker<PlayerConnectedDTO>(options);
             Container.BindMessageBroker<SidePlayerConnectedDTO>(options);
             Container.BindMessageBroker<PlayerLeaveDTO>(options);
             Container.BindMessageBroker<AllPlayerInfoDTO>(options);
             Container.BindMessageBroker<AddCardDTO>(options);
+            Container.BindMessageBroker<SetMoveStateDTO>(options);
+            Container.BindMessageBroker<CanUseCardReceiverDTO>(options);
+            Container.BindMessageBroker<UseCardReceiverDTO>(options);
+            Container.BindMessageBroker<UseCardOtherDTO>(options);
+            Container.BindMessageBroker<PlayerPassedDTO>(options);
         }
 
         private void DomainDTO(MessagePipeOptions options)
-        {
+        { 
             Container.BindMessageBroker<AddPlayerToLobbyDTO>(options);
             Container.BindMessageBroker<CurrentPlayerAddedDTO>(options);
             Container.BindMessageBroker<SelectCardDTO>(options);
             Container.BindMessageBroker<DeselectCardDTO>(options);
             Container.BindMessageBroker<CardMoveDTO>(options);
+            Container.BindMessageBroker<MoveUsedCardsDTO>(options);
+            Container.BindMessageBroker<AddCardOtherDTO>(options);
         }
 
         private void ViewDTO(MessagePipeOptions options)
         {
             Container.BindMessageBroker<SelectViewCardDTO>(options);
+            Container.BindMessageBroker<PlayerSetCardCountDTO>(options);
+            Container.BindMessageBroker<CardDestroyViewDTO>(options);
+            Container.BindMessageBroker<PlayerAddCardViewDTO>(options);
         }
     }
 }

@@ -29,6 +29,11 @@ namespace _Source.Domain.Card
             return false;
         }
 
+        public void ClearSlot()
+        {
+            _cardModel = null;
+        }
+
         public ICardModel GetCard()
         {
             var cardModel = _cardModel;

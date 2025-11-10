@@ -1,3 +1,4 @@
+using _Source.Application.Cards;
 using _Source.Application.GameState;
 using _Source.Application.Lobby;
 using _Source.Application.Players;
@@ -59,5 +60,6 @@ public class BaseInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
         Container.BindInterfacesAndSelfTo<SetupPlayerInfoService>().AsSingle();
         Container.BindInterfacesAndSelfTo<LobbyInfoService>().AsSingle();
+        Container.BindInterfacesAndSelfTo<MoveCardsService>().AsSingle();
     }
 }

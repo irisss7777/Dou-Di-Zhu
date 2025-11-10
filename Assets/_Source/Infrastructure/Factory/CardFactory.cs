@@ -19,22 +19,27 @@ namespace _Source.Infrastructure.Factory
         private CardDatabase _cardDatabase;
         private CardStartPosition _cardStartPosition;
         private ClickInputController _clickInputController;
+        private PlayerStartPositions _playerStartPositions;
         
         [Inject] private readonly IPublisher<SelectInputCardDTO> _selectInputCardPublisher;
         
         [Inject] private readonly ISubscriber<SelectViewCardDTO> _selectViewCardPublisher;
         [Inject] private readonly ISubscriber<AddCardDTO> _addCardPublisher;
+        [Inject] private readonly ISubscriber<AddCardOtherDTO> _addCardOtherPublisher;
         [Inject] private readonly ISubscriber<CardMoveDTO> _cardModeSubscriber;
+        [Inject] private readonly ISubscriber<CardDestroyViewDTO> _cardDestroySubscriber;
         
         private DisposableBagBuilder _disposable;
         
         [Inject]
-        private void Construct(ICardDataBase cardDatabase, CardStartPosition cardStartPosition, ClickInputController clickInputController)
+        private void Construct(ICardDataBase cardDatabase, CardStartPosition cardStartPosition, ClickInputController clickInputController, PlayerStartPositions playerStartPositions)
         {
             _cardDatabase = cardDatabase as CardDatabase;
             _cardStartPosition = cardStartPosition;
 
             _clickInputController = clickInputController;
+
+            _playerStartPositions = playerStartPositions;
         }
         
         public void Initialize()
@@ -42,15 +47,32 @@ namespace _Source.Infrastructure.Factory
             _disposable = DisposableBag.CreateBuilder();
             
             _addCardPublisher.Subscribe((message) => CreateCard(message.CardData)).AddTo(_disposable);
+            _addCardOtherPublisher.Subscribe((message) => CreateCardOther(message)).AddTo(_disposable);
         }
 
-        public void CreateCard(CardData[] cardData)
+        private void CreateCard(CardData[] cardData)
         {
             foreach (var card in cardData)
             {
                 CardView cardPrefab = _cardDatabase.CardPrefab as CardView;
+                
                 CardView cardView = GameObject.Instantiate(cardPrefab, _cardStartPosition.gameObject.transform.position, Quaternion.identity);
-                cardView.Initialize(card, _cardModeSubscriber, _selectInputCardPublisher, _selectViewCardPublisher);
+                
+                cardView.Initialize(card, _cardModeSubscriber, _selectInputCardPublisher, _selectViewCardPublisher, _cardDestroySubscriber);
+                cardView.SetupSprite(_cardDatabase.GetCardSprite(card));
+            }
+        }
+        
+        private void CreateCardOther(AddCardOtherDTO message)
+        {
+            foreach (var card in message.CardData)
+            {
+                CardView cardPrefab = _cardDatabase.CardPrefab as CardView;
+                
+                CardView cardView = GameObject.Instantiate(cardPrefab, _playerStartPositions.GetData(message.UserName).Transform.position, Quaternion.identity);
+                
+                cardView.Initialize(card, _cardModeSubscriber, _selectInputCardPublisher, _selectViewCardPublisher, _cardDestroySubscriber);
+                cardView.SetupSprite(_cardDatabase.GetCardSprite(card));
             }
         }
 

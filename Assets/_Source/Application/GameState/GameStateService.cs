@@ -1,5 +1,6 @@
 ﻿using System;
 using _Source.Contracts.DTO.GameStage;
+using _Source.Contracts.DTO.Web;
 using _Source.Contracts.DTO.Web.WebsocketConnectionDTO;
 using _Source.Presentation.View.GameStateView;
 using MessagePipe;
@@ -11,6 +12,7 @@ namespace _Source.Application.GameState
 {
     public class GameStateService : IDisposable, IInitializable
     {
+        [Inject] private readonly ISubscriber<SetMoveStateDTO> _playerConnectedSubscriber;
         [Inject] private readonly ISubscriber<GameActiveStateDTO> _gameActiveStateSubscriber;
         [Inject] private readonly ISubscriber<LobbyInfoStateDTO> _lobbyInfoStateSubscriber;
         [Inject] private readonly ISubscriber<ErrorDTO> _errorConnectionSubscriber;
@@ -34,6 +36,7 @@ namespace _Source.Application.GameState
             _errorConnectionSubscriber.Subscribe((message) => SetConnectionErrorActive(message.ErrorMessage, true)).AddTo(_disposable);
             _connectionSubscriber.Subscribe((message) => SetConnectionErrorActive("Connection error", !message.Connection)).AddTo(_disposable);
             _lobbyInfoStateSubscriber.Subscribe((message) => SetLobbyInfoActive(message.LobbyActive)).AddTo(_disposable);
+            _playerConnectedSubscriber.Subscribe((message) => SetPlayButtonsActive(message.MoveState)).AddTo(_disposable);
         }
 
         private void SetConnectionErrorActive(string errorMessage, bool active)
@@ -45,13 +48,24 @@ namespace _Source.Application.GameState
             if (active)
             {
                 _gameStateView.ConnectionErrorGroup.gameObject.SetActive(true);
-                _gameStateView.ConnectionErrorGroup.DOFade(targetAlpha, 1f);
+                _gameStateView.ConnectionErrorGroup.DOFade(targetAlpha, 0.5f);
             }
             else
             {
-                _gameStateView.ConnectionErrorGroup.DOFade(targetAlpha, 1f).OnComplete(() =>
+                _gameStateView.ConnectionErrorGroup.DOFade(targetAlpha, 0.5f).OnComplete(() =>
                     _gameStateView.ConnectionErrorGroup.gameObject.SetActive(false));
             }
+        }
+
+        private void SetPlayButtonsActive(bool active)
+        {
+            var targetAlpha = active ? 1f : 0f;
+
+            if (active)
+                _gameStateView.PlayButtonsGroup.gameObject.SetActive(true);
+            
+            _gameStateView.PlayButtonsGroup.DOFade(targetAlpha, 1f).OnComplete(() =>
+                _gameStateView.PlayButtonsGroup.gameObject.SetActive(active));
         }
 
         private void SetGameActive(bool active)

@@ -5,6 +5,7 @@ namespace _Source.Contracts.Card
 {
     public interface ICardView
     {
-        public void Initialize(CardData cardData, ISubscriber<CardMoveDTO> cardMode, IPublisher<SelectInputCardDTO> selectInput, ISubscriber<SelectViewCardDTO> selectView);
+        public void Initialize(CardData cardData, ISubscriber<CardMoveDTO> cardMode, IPublisher<SelectInputCardDTO> selectInput,
+            ISubscriber<SelectViewCardDTO> selectView, ISubscriber<CardDestroyViewDTO> cardDestroySubscriber);
     }
 }

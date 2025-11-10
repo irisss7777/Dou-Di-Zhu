@@ -12,9 +12,175 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd7f675342de47369f414bde9b82ac1c, type: 3}
   m_Name: CardDatabase
   m_EditorClassIdentifier: 
-  _slotsCount: 10
-  _distanceBetweenCards: 0.7
+  _slotsCount: 17
+  _distanceBetweenCards: 0.6
   _selectDeltaPosition: {x: 0, y: 0.7}
   _defaultCardPositionInSlot: {x: 0, y: -3.4}
   _moveDuration: 1
   _cardViewPrefab: {fileID: 2337709620868366242, guid: e0f46d6d8204c8b49a960bd4a3101552, type: 3}
+  _allCardsData:
+  - CardValue: 0
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: a338ab4fdd3753042bf5229f09ea5b83, type: 3}
+  - CardValue: 0
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 9e1e1b05c5bc5874298cd15be7de387b, type: 3}
+  - CardValue: 0
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 6d15e3eb655884a4cb2f6c684f136482, type: 3}
+  - CardValue: 0
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: ea215172976c7794abf9f191d3e60c1c, type: 3}
+  - CardValue: 1
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: 62cafce501c1da94d8fb24f2b63d6c5a, type: 3}
+  - CardValue: 1
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 0dc186ec80312d44da6f15a68d9879c5, type: 3}
+  - CardValue: 1
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 67b8cd9c200898f448f4f86d37011e2a, type: 3}
+  - CardValue: 1
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 757086d8d6f41c7498b090cac32036d9, type: 3}
+  - CardValue: 2
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: d561f02120d348b4982df9a5e7b82fa2, type: 3}
+  - CardValue: 2
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 1e794fb2ff08845448069e08a124ce56, type: 3}
+  - CardValue: 2
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 253846edf99a0ef4ab10b4f9aff1cf32, type: 3}
+  - CardValue: 2
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 10d7b66f494b7d04eba3bfc193740475, type: 3}
+  - CardValue: 3
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: 7b70052fcc34f6a47b3f4fb7882bc22d, type: 3}
+  - CardValue: 3
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 63f5dcac4125f4d438fa1313f20a44a9, type: 3}
+  - CardValue: 3
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 729790d6a1bec294bb281db145d25385, type: 3}
+  - CardValue: 3
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: fd5eb486e9c0f9e4c85929ec6b828cb3, type: 3}
+  - CardValue: 4
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: b23ac50167ea5ed4f830d383322fda12, type: 3}
+  - CardValue: 4
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: f1c6788243d037b4b9392c43bfb9f7eb, type: 3}
+  - CardValue: 4
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 15d8067e4dc79584bad679dea46c5a6d, type: 3}
+  - CardValue: 4
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 8cfab7c6a650f224da7fcd73e9ccaed9, type: 3}
+  - CardValue: 5
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: a4cf2bf1774194541a790bd68c5d8524, type: 3}
+  - CardValue: 5
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 2c5c7a43944fea64d8ff6c8a92ed768e, type: 3}
+  - CardValue: 5
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: aa5098f5c54dcd74ca9185170931d98e, type: 3}
+  - CardValue: 5
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 0d12e7016af94c84ca6a51e55bbc42ab, type: 3}
+  - CardValue: 6
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: 4b46ab0c628399349b7e9a9a42b6bd5d, type: 3}
+  - CardValue: 6
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: ec60170ad392f17488c437cc7cd084f1, type: 3}
+  - CardValue: 6
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: bda758bd6ff4e6e49b0874c53e63f411, type: 3}
+  - CardValue: 6
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 7ea4082bf84ef6d40bb3bb66926c80d5, type: 3}
+  - CardValue: 7
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: 8989c32afd108824d8f2e0814455cec4, type: 3}
+  - CardValue: 7
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 0d1aba864fa49294c918e3480ec0c383, type: 3}
+  - CardValue: 7
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 5b488ce19ae5c9c48b8d6a71ba6ea42a, type: 3}
+  - CardValue: 7
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 53f0d12cc3d3e834486b26ab55a07bf1, type: 3}
+  - CardValue: 8
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: 30fa45389fece844baf86bfa2374489b, type: 3}
+  - CardValue: 8
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 7f9a5dbdbcfb7f343837ffc0abaac082, type: 3}
+  - CardValue: 8
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: e5fd8deba5f29bc4c896cca0c6249e3a, type: 3}
+  - CardValue: 8
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 30e44c75802270049b13ae18436f07b6, type: 3}
+  - CardValue: 9
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: 5cad3014582a977418bae8154e795aae, type: 3}
+  - CardValue: 9
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: f0529a8bf98fae544bc43e49c275cfd9, type: 3}
+  - CardValue: 9
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 9d027a61e04b91d4b9c01e53f30e7de5, type: 3}
+  - CardValue: 9
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 7b678e8ee2a0b124f8516c9f3aa46eb0, type: 3}
+  - CardValue: 10
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: 3b6c3091fae189345bbec354ad520194, type: 3}
+  - CardValue: 10
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 6689e743750bb2643a35141caacd3ebd, type: 3}
+  - CardValue: 10
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 94cd4a8b4f0b2ce429837bba85cb0ceb, type: 3}
+  - CardValue: 10
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: d712bf2136c84e947b927742ab1eebc5, type: 3}
+  - CardValue: 11
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: e8a45ca2e97dde94e9d4b19d4d085529, type: 3}
+  - CardValue: 11
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: 5a210d52f2f8c4c41bc1f821fe2e2f16, type: 3}
+  - CardValue: 11
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: 51519c1f207c72b4d9175e1f0afcc4ce, type: 3}
+  - CardValue: 11
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: d483a9e5a68ab9f4e884c86e218ccce8, type: 3}
+  - CardValue: 12
+    CardSuit: 0
+    Sprite: {fileID: 21300000, guid: 8209abdc0ccaaad47b35f576b8949eb0, type: 3}
+  - CardValue: 12
+    CardSuit: 1
+    Sprite: {fileID: 21300000, guid: f366dc3d89e099742b1337d7d10d285d, type: 3}
+  - CardValue: 12
+    CardSuit: 2
+    Sprite: {fileID: 21300000, guid: bb2591b1e8eaf32478ce0be257e26b99, type: 3}
+  - CardValue: 12
+    CardSuit: 3
+    Sprite: {fileID: 21300000, guid: 2751625d2cef57e46806a5728c89ccfd, type: 3}
+  - CardValue: 13
+    CardSuit: 4
+    Sprite: {fileID: 21300000, guid: 238ef6df784554645b0ba2b239c7aadc, type: 3}
+  - CardValue: 13
+    CardSuit: 5
+    Sprite: {fileID: 21300000, guid: 1a2655267a21ae345a8bd588dbd92e4b, type: 3}
+  _useMoveDuration: 1
+  _distanceBetweenUsedCards: 0.25
+  _useMoveSize: 0.65

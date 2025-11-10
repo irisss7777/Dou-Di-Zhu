@@ -14,7 +14,10 @@ namespace _Source.Application.Web
     {
         private WebSocket _socket;
         
-        [Inject] private readonly ISubscriber<PlayerConnectSendDTO> _playerConnectSendDTOSubscriber;
+        [Inject] private readonly ISubscriber<PlayerConnectSendDTO> _playerConnectSendSubscriber;
+        [Inject] private readonly ISubscriber<PlayerPassDTO> _playerPassSubscriber; 
+        [Inject] private readonly ISubscriber<CanUseCardDTO> _canUseCardSubscriber; 
+        [Inject] private readonly ISubscriber<UseCardDTO> _useCardSubscriber; 
         
         private DisposableBagBuilder _disposable;
 
@@ -29,7 +32,10 @@ namespace _Source.Application.Web
             
             _disposable = DisposableBag.CreateBuilder();
             
-            _playerConnectSendDTOSubscriber.Subscribe((message ) => SendMessage(message.Type, message.Data)).AddTo(_disposable);
+            _playerConnectSendSubscriber.Subscribe((message ) => SendMessage(message.Type, message.Data)).AddTo(_disposable);
+            _playerPassSubscriber.Subscribe((message ) => SendMessage(message.Type, message.Data)).AddTo(_disposable);
+            _canUseCardSubscriber.Subscribe((message ) => SendMessage(message.Type, message.Data)).AddTo(_disposable);
+            _useCardSubscriber.Subscribe((message ) => SendMessage(message.Type, message.Data)).AddTo(_disposable);
             
             _isInitialized = true;
         }

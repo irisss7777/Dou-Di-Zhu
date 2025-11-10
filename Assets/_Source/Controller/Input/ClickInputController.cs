@@ -1,6 +1,7 @@
 ﻿using System;
 using _Source.Contracts.CustomUpdate;
 using _Source.Contracts.DTO.Card;
+using _Source.Contracts.DTO.Web;
 using MessagePipe;
 using Zenject;
 using UnityEngine;
@@ -10,13 +11,16 @@ namespace _Source.Controller.Input
     public class ClickInputController : IDisposable, IInitializable
     {
         private CustomUpdate _customUpdate;
-        
-        [Inject] private readonly ISubscriber<SelectInputCardDTO> _selectViewCardSubscriber;
+
         [Inject] private readonly IPublisher<SelectCardDTO> _selectCardPublisher;
+        
+        [Inject] private readonly ISubscriber<PlayerConnectedDTO> _playerConnectedSubscriber;
+        [Inject] private readonly ISubscriber<SelectInputCardDTO> _selectViewCardSubscriber;
 
         private bool _isClickedPush;
         private SelectInputCardDTO _lastSelected;
         private bool _isPushed;
+        private string _userId;
         
         private DisposableBagBuilder _disposable;
         
@@ -33,6 +37,7 @@ namespace _Source.Controller.Input
             _disposable = DisposableBag.CreateBuilder();
 
             _selectViewCardSubscriber.Subscribe((message) => SelectCard(message)).AddTo(_disposable);
+            _playerConnectedSubscriber.Subscribe((message) => _userId = message.UserId).AddTo(_disposable);
         }
 
         private void Update()
@@ -46,7 +51,7 @@ namespace _Source.Controller.Input
             if (_lastSelected.InCollider && !_isPushed)
             {
                 _isPushed = true;
-                _selectCardPublisher.Publish(new SelectCardDTO(_lastSelected.CardData, !_lastSelected.Select));
+                _selectCardPublisher.Publish(new SelectCardDTO(_lastSelected.CardData, !_lastSelected.Select, _userId));
             }
         }
 

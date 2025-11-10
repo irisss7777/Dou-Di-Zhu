@@ -16,6 +16,8 @@ namespace _Source.Infrastructure.Installers
         
         [Header("Start positions")]
         [SerializeField] private CardStartPosition _cardStartPosition;
+
+        [SerializeField] private PlayerStartPositions _playerStartPositions;
         
         public override void InstallBindings()
         {
@@ -34,6 +36,7 @@ namespace _Source.Infrastructure.Installers
         private void InstallStartPositions()
         {
             Container.Bind<CardStartPosition>().FromInstance(_cardStartPosition).AsSingle();
+            Container.Bind<PlayerStartPositions>().FromInstance(_playerStartPositions).AsSingle();
         }
     }
 }

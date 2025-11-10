@@ -6,6 +6,8 @@ namespace _Source.Contracts.Card
     {
         public float Duration { get; }
         public Vector2 TryPlaceCard(ICardModel cardModel);
+        public void RearrangeCardsWithGrouping(ICardModel[] cards);
         public Vector2 GetSelectPosition(ICardModel cardModel, bool select);
+        public void ClearGrid();
     }
 }
