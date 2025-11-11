@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using _Source.Contracts.Card;
 using Cysharp.Threading.Tasks;
 
 namespace _Source.Contracts.CardHandler
 {
-    public interface ICardHandlerModel
+    public interface ICardHandlerModel : IDisposable
     {
         public List<ICardModel> SelectedCardModels { get; }
         public List<ICardModel> CardModels { get; }

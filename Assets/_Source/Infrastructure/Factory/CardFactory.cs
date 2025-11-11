@@ -3,6 +3,7 @@ using _Source.Contracts.Card;
 using _Source.Contracts.DataBase;
 using _Source.Contracts.DTO.Card;
 using _Source.Contracts.DTO.Web;
+using _Source.Contracts.Factory;
 using _Source.Controller.Input;
 using _Source.Domain.Card;
 using Zenject;
@@ -14,11 +15,10 @@ using UnityEngine;
 
 namespace _Source.Infrastructure.Factory
 {
-    public class CardFactory : IDisposable, IInitializable
+    public class CardFactory : IDisposable, IInitializable, ICardFactory
     {
         private CardDatabase _cardDatabase;
         private CardStartPosition _cardStartPosition;
-        private ClickInputController _clickInputController;
         private PlayerStartPositions _playerStartPositions;
         
         [Inject] private readonly IPublisher<SelectInputCardDTO> _selectInputCardPublisher;
@@ -29,15 +29,16 @@ namespace _Source.Infrastructure.Factory
         [Inject] private readonly ISubscriber<CardMoveDTO> _cardModeSubscriber;
         [Inject] private readonly ISubscriber<CardDestroyViewDTO> _cardDestroySubscriber;
         
+        [Inject] private readonly IPublisher<CardMoveDTO> _cardModePublisher;
+        [Inject] private readonly IPublisher<CardDestroyViewDTO> _cardDestroyPublisher;
+        
         private DisposableBagBuilder _disposable;
         
         [Inject]
-        private void Construct(ICardDataBase cardDatabase, CardStartPosition cardStartPosition, ClickInputController clickInputController, PlayerStartPositions playerStartPositions)
+        private void Construct(ICardDataBase cardDatabase, CardStartPosition cardStartPosition, PlayerStartPositions playerStartPositions)
         {
             _cardDatabase = cardDatabase as CardDatabase;
             _cardStartPosition = cardStartPosition;
-
-            _clickInputController = clickInputController;
 
             _playerStartPositions = playerStartPositions;
         }
@@ -48,6 +49,11 @@ namespace _Source.Infrastructure.Factory
             
             _addCardPublisher.Subscribe((message) => CreateCard(message.CardData)).AddTo(_disposable);
             _addCardOtherPublisher.Subscribe((message) => CreateCardOther(message)).AddTo(_disposable);
+        }
+
+        public ICardModel CreateCardModel(CardData cardData)
+        {
+            return new CardModel(cardData, _cardModePublisher, _cardDestroyPublisher);
         }
 
         private void CreateCard(CardData[] cardData)

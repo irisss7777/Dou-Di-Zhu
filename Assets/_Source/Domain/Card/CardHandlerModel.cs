@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using _Source.Contracts.Card;
 using _Source.Contracts.CardHandler;
@@ -132,6 +133,15 @@ namespace _Source.Domain.Card
                     float duration = _cardGridModel.Duration;
                     card.MoveCard(targetPosition, duration);
                 }
+            }
+        }
+
+        public void Dispose()
+        {
+            foreach (var card in _cardModels)
+            {
+                card.Dispose();
+                _cardModels.Remove(card);
             }
         }
     }

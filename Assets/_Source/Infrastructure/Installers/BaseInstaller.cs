@@ -4,6 +4,8 @@ using _Source.Application.Lobby;
 using _Source.Application.Players;
 using _Source.Application.Web;
 using _Source.Contracts.CustomUpdate;
+using _Source.Contracts.Factory;
+using _Source.Contracts.Player;
 using _Source.Controller.Input;
 using _Source.Domain.Card;
 using _Source.Domain.GameLobby;
@@ -17,6 +19,10 @@ public class BaseInstaller : MonoInstaller
     
     public override void InstallBindings()
     {
+        MessageBus();
+
+        BaseService();
+        
         DomainInstaller();
         
         WebInstall();
@@ -28,10 +34,19 @@ public class BaseInstaller : MonoInstaller
         GameServiceInstaller();
     }
 
+    private void MessageBus()
+    {
+        Container.BindInterfacesAndSelfTo<PlayerMessageBusService>().AsSingle();
+    }
+
+    private void BaseService()
+    {
+        Container.BindInterfacesAndSelfTo<PlayerCardsService>().AsSingle();
+    }
+
     private void DomainInstaller()
     {
-        CustomUpdate customUpdate = new CustomUpdate(_updateDelay);
-        Container.Bind<CustomUpdate>().FromInstance(customUpdate).AsSingle();
+        Container.Bind<CustomUpdate>().FromInstance(new CustomUpdate(_updateDelay)).AsSingle();
         
         Container.BindInterfacesAndSelfTo<CardGridModel>().AsSingle();
     }
@@ -46,13 +61,13 @@ public class BaseInstaller : MonoInstaller
 
     private void ControllersInstaller()
     {
-        Container.BindInterfacesAndSelfTo<ClickInputController>().AsSingle();
+        Container.BindInterfacesAndSelfTo<ClickInputController>().AsSingle().NonLazy();
     }
 
     private void FactoryInstall()
     {
-        Container.BindInterfacesAndSelfTo<PlayerFactory>().AsSingle();
-        Container.BindInterfacesAndSelfTo<CardFactory>().AsSingle();
+        Container.BindInterfacesAndSelfTo<PlayerFactory>().AsSingle().NonLazy();
+        Container.BindInterfacesAndSelfTo<CardFactory>().AsSingle().NonLazy();
     }
 
     private void GameServiceInstaller()

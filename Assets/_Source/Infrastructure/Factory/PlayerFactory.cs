@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Source.Application.Players;
 using _Source.Contracts.View;
 using _Source.Contracts.Card;
 using _Source.Contracts.DataBase;
@@ -22,35 +23,18 @@ namespace _Source.Infrastructure.Factory
 {
     public class PlayerFactory : IDisposable, IInitializable
     {
-        //Model
+        [Inject] private readonly PlayerMessageBusService _playerMessageBus;
+        [Inject] private readonly PlayerCardsService _playerCardsService;
+        
+        
         [Inject] private readonly ISubscriber<PlayerConnectedDTO> _playerConnectedSubscriber;
         [Inject] private readonly ISubscriber<SidePlayerConnectedDTO> _sidePlayerConnectedSubscriber;
         [Inject] private readonly ISubscriber<PlayerLeaveDTO> _playerLeaveSubscriber;
         [Inject] private readonly ISubscriber<AllPlayerInfoDTO> _allPlayerInfoSubscriber;
-
-        [Inject] private readonly IPublisher<CurrentPlayerAddedDTO> _playerAddedPublisher;
-        [Inject] private readonly IPublisher<SelectViewCardDTO> _selectViewCardPublisher;
-        [Inject] private readonly IPublisher<CanUseCardDTO> _canUseCardPublisher;
-        [Inject] private readonly IPublisher<UseCardDTO> _useCardPublisher;
-        [Inject] private readonly IPublisher<MoveUsedCardsDTO> _moveUsedCardsPublisher;
-        [Inject] private readonly IPublisher<AddCardOtherDTO> _addCardPublisher;
-        [Inject] private readonly IPublisher<PlayerSetCardCountDTO> _playerSetCardCountPublisher;
-        [Inject] private readonly IPublisher<PlayerAddCardViewDTO> _playerAddCardViewPublisher;
-
-        [Inject] private readonly ISubscriber<AddCardDTO> _addCardSubscriber;
-        [Inject] private readonly ISubscriber<SelectCardDTO> _selectCardSubscriber;
-        [Inject] private readonly ISubscriber<DeselectCardDTO> _deselectCardSubscriber;
-        [Inject] private readonly ISubscriber<UseCardInputDTO> _useCardSubscriber;
-        [Inject] private readonly ISubscriber<UseCardReceiverDTO> _useCardFinallySubscriber;
-        [Inject] private readonly ISubscriber<UseCardOtherDTO> _useCardOtherSubscriber;
-
-        //View
+        
         [Inject] private readonly ISubscriber<PlayerSetCardCountDTO> _playerSetCardCountSubscriber;
         [Inject] private readonly ISubscriber<PlayerPassedDTO> _playerPassedSubscriber;
         [Inject] private readonly ISubscriber<PlayerAddCardViewDTO> _playerAddCardViewSubscriber;
-        
-        [Inject] private readonly IPublisher<CardMoveDTO> _cardModePublisher;
-        [Inject] private IPublisher<CardDestroyViewDTO> _cardDestroyPublisher;
 
         private ICardGridModel _cardGridModel;
         
@@ -60,8 +44,6 @@ namespace _Source.Infrastructure.Factory
 
         private List<IPlayerView> _playersView = new();
 
-        private PlayerMessageData _playerMessageData;
-        
         private DisposableBagBuilder _disposable;
         
         [Inject]
@@ -87,17 +69,12 @@ namespace _Source.Infrastructure.Factory
             
             _allPlayerInfoSubscriber.Subscribe((message) => 
                 DownloadDataAboutAll(message.UserId, message.UserName, message.MaxLobbyPlayers, message.SkinNumber)).AddTo(_disposable);
-
-            _playerMessageData = new PlayerMessageData(_playerAddedPublisher, _addCardSubscriber, _selectCardSubscriber,
-                _cardModePublisher, _selectViewCardPublisher, _canUseCardPublisher, _useCardPublisher, _useCardSubscriber, 
-                _useCardFinallySubscriber, _cardDestroyPublisher, _moveUsedCardsPublisher, _useCardOtherSubscriber,
-                _addCardPublisher, _playerSetCardCountPublisher, _playerAddCardViewPublisher);
         }
 
         private void CreatePlayer(string userId, string name, int maxPlayerCount, int skinNumber)
         {
             _gameLobbyModel.SetupLobby(maxPlayerCount);
-            var player = new PlayerModel(new PlayerData(userId, name, _gameLobbyModel), _playerMessageData, _cardGridModel);
+            var player = new PlayerModel(new PlayerData(userId, name, _gameLobbyModel), _cardGridModel, _playerMessageBus, _playerCardsService);
             
             CreatePlayerView(name, skinNumber, true).SetIsMe();
         }
@@ -105,7 +82,7 @@ namespace _Source.Infrastructure.Factory
         private void CreateSidePlayer(string userId, string name, int maxPlayerCount, int skinNumber)
         {
             _gameLobbyModel.SetupLobby(maxPlayerCount);
-            var player = new PlayerModel(new PlayerData(userId, name, _gameLobbyModel), _playerMessageData, _cardGridModel);
+            var player = new PlayerModel(new PlayerData(userId, name, _gameLobbyModel), _cardGridModel, _playerMessageBus, _playerCardsService);
 
             CreatePlayerView(name, skinNumber);
         }
@@ -153,7 +130,7 @@ namespace _Source.Infrastructure.Factory
             _gameLobbyModel.SetupLobby(maxPlayerCount);
             for(int i = 0; i < names.Length; i++)
             {
-                var player = new PlayerModel(new PlayerData(userId, names[i], _gameLobbyModel), _playerMessageData, _cardGridModel);
+                var player = new PlayerModel(new PlayerData(userId, names[i], _gameLobbyModel), _cardGridModel, _playerMessageBus, _playerCardsService);
                 CreatePlayerView(names[i], skinNumber[i]);
             }
         }
